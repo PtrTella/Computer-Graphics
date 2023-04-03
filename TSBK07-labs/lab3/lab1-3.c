@@ -70,7 +70,7 @@ void init(void)
 
 	//Matrix application
 	//TODO:: IN DISPLAY MULTIPLY THIS MATRIX FOR T AND FIN AN METHOD TO SEND IT TO VER INTO UNIFORM 
-	glUniformMatrix4fv(glGetUniformLocation(program, "myMatrixDUO"), 1, GL_TRUE, myMatrixDUO);
+	glUniformMatrix4fv(glGetUniformLocation(program, "myMatrix"), 1, GL_TRUE, myMatrixDUO);
 
 
 	//COlor change
@@ -97,7 +97,7 @@ void display(void)
 	myMatrixDUO[4] = sin(radiants);
 	myMatrixDUO[5] = cos(radiants);
 
-	glUniformMatrix4fv(glGetUniformLocation(program, "myMatrixDUO"), 1, GL_TRUE, myMatrixDUO);
+	glUniformMatrix4fv(glGetUniformLocation(program, "myMatrix"), 1, GL_TRUE, myMatrixDUO);
 
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
