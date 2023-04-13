@@ -143,6 +143,7 @@ int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
 	glutInitContextVersion(3, 2);
+	glutInitWindowSize (800, 600);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow ("Trippy sandstorm Bunny");
 	glEnable(GL_DEPTH_TEST);
