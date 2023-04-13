@@ -8,75 +8,19 @@
 #include "MicroGlut.h"
 #include "math.h"
 #include "stdio.h"
+#include "../common/LittleOBJLoader.h"
+
+
 // uses framework OpenGL
 // uses framework Cocoa
 
 // Globals
 // Data would normally be read from files
-GLfloat vertices[] =
-	{
-		// Pyramid
-
-		// Front
-		0.0f,	0.5f,	0.0f,
-		-0.5f,-0.5f,0.5f,
-		0.5f,-0.5f,	0.5f,
-
-		// Right
-		0.0f,	0.5f,	0.0f,
-		0.5f,-0.5f,	0.5f,
-		0.5f,-0.5f,-0.5f,
-
-		// Back
-		0.0f,	0.5f,	0.0f,
-		0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f,-0.5f,
-
-		// Left
-		0.0f,	0.5f,	0.0f,
-		-0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f,0.5f,
-
-		// Bottom (sqared)
-		-0.5f,-0.5f,0.5f,
-		0.5f,-0.5f,	0.5f,
-		0.5f,-0.5f,-0.5f,
-
-		-0.5f,-0.5f,0.5f,
-		0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f,-0.5f,
-};
-
-GLfloat color[] =
-	{
-		// Front
-		0.0f,	0.5f,	0.0f,
-		-0.5f,-0.5f,0.5f,
-		0.5f,-0.5f,	0.5f,
-
-		// Right
-		0.0f,	0.5f,	0.0f,
-		0.5f,-0.5f,	0.5f,
-		0.5f,-0.5f,-0.5f,
-
-		// Back
-		0.0f,	0.5f,	0.0f,
-		0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f,-0.5f,
-
-		// Left
-		0.0f,	0.5f,	0.0f,
-		-0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f,0.5f,
-
-		// Bottom (sqared)
-		-0.5f,-0.5f,0.5f,
-		0.5f,-0.5f,	0.5f,
-		0.5f,-0.5f,-0.5f,
-
-		-0.5f,-0.5f,0.5f,
-		0.5f,-0.5f,-0.5f,
-		-0.5f,-0.5f,-0.5f,
+GLfloat color[] = 
+{
+	1.0f,0.0f,0.0f,
+	0.0f,1.0f,0.0f,
+	0.0f,0.0f,1.0f,	
 };
 
 GLfloat Rotx[] =
@@ -100,16 +44,26 @@ GLfloat Rotz[] =
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f};
 
-// vertex array object
-unsigned int vertexArrayObjID;
+// Bunny model
+Model *m;
 // Reference to shader program
 GLuint program;
+// vertex array object
+unsigned int bunnyVertexArrayObjID;
 
 void init(void)
 {
-	// vertex buffer object, used for uploading the geometry
-	unsigned int vertexBufferObjID;
+
+	// Load bunny model
+	m = LoadModel("teddy.obj");
+
+
+	// Vertex array object for bunny
+	unsigned int bunnyVertexBufferObjID;
+	unsigned int bunnyIndexBufferObjID;
+	unsigned int bunnyNormalBufferObjID;
 	unsigned int colorBufferObjID;
+
 
 	dumpInfo();
 
@@ -119,28 +73,43 @@ void init(void)
 	printError("GL inits");
 
 	// Load and compile shader
-	program = loadShaders("lab1-5.vert", "lab1-5.frag");
+	program = loadShaders("lab1-6.vert", "lab1-6.frag");
 	printError("init shader");
 
 	// Upload geometry to the GPU:
 
-	// Allocate and activate Vertex Array Object
-	glGenVertexArrays(1, &vertexArrayObjID);
-	glBindVertexArray(vertexArrayObjID);
+	// Allocate and Activate Vertex Array Object
+	glGenVertexArrays(1, &bunnyVertexArrayObjID);
+	glBindVertexArray(bunnyVertexArrayObjID);
 
-	// Allocate Vertex Buffer Objects
-	glGenBuffers(1, &vertexBufferObjID);
+	glGenBuffers(1, &bunnyVertexBufferObjID);
+	glGenBuffers(1, &bunnyNormalBufferObjID);
+	glGenBuffers(1, &bunnyIndexBufferObjID);
+
 	// VBO for vertex data
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjID);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 9 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, bunnyVertexBufferObjID);
+	glBufferData(GL_ARRAY_BUFFER, m->numVertices * 3 * sizeof(GLfloat), m->vertexArray, GL_STATIC_DRAW);
 	glVertexAttribPointer(glGetAttribLocation(program, "in_Position"), 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(glGetAttribLocation(program, "in_Position"));
 
-	// Allocate Vertex Buffer Objects
+	// VBO for normal data
+	glBindBuffer(GL_ARRAY_BUFFER, bunnyNormalBufferObjID);
+	glBufferData(GL_ARRAY_BUFFER, m->numVertices * 3 * sizeof(GLfloat), m->normalArray, GL_STATIC_DRAW);
+	glVertexAttribPointer(glGetAttribLocation(program, "in_Normal"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(glGetAttribLocation(program, "in_Normal"));
+
+	// VBO for index data
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bunnyIndexBufferObjID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m->numIndices * sizeof(GLuint), m->indexArray, GL_STATIC_DRAW);
+
+
+
+	// Color buffer
 	glGenBuffers(1, &colorBufferObjID);
+
 	// VB0 for color data
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferObjID);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 9 * sizeof(GLfloat), color, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), color, GL_STATIC_DRAW);
 	glVertexAttribPointer(glGetAttribLocation(program, "in_Color"), 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(glGetAttribLocation(program, "in_Color"));
 
@@ -156,10 +125,10 @@ void display(void)
 	printError("pre display");
 
 	// clear the screen
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindVertexArray(vertexArrayObjID);  // Select VAO
-	glDrawArrays(GL_TRIANGLES, 0, 6 * 3); // draw object
+	glBindVertexArray(bunnyVertexArrayObjID);  							// Select VA0
+	glDrawElements(GL_TRIANGLES, m->numIndices, GL_UNSIGNED_INT, 0L);	// draw object
 
 	glUniformMatrix4fv(glGetUniformLocation(program, "Rotx"), 1, GL_TRUE, Rotx);
 	glUniformMatrix4fv(glGetUniformLocation(program, "Roty"), 1, GL_TRUE, Roty);
@@ -199,8 +168,9 @@ int main(int argc, char *argv[])
 	glutInit(&argc, argv);
 	glutInitContextVersion(3, 2);
 	glutInitWindowSize(600, 600);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("GL3 white triangle example LAB 3");
-	// glutRepeatingTimer(20);
+	glDisable(GL_CULL_FACE);
 	glutDisplayFunc(display);
 	glutTimerFunc(20, &updateMatrix, 0);
 	init();
