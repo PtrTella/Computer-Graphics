@@ -5,7 +5,18 @@
 *.o
 *.ko
 *.obj
+!*/model/*.obj
 *.elf
+
+# Texture files
+*.dds
+*.tga
+!*/texture/*.tga
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.gif
 
 # Linker output
 *.ilk

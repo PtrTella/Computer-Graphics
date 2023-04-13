@@ -1,7 +1,0 @@
-1-  The origin is placed in trhe middle of the windows
-    in fact the coordinate 0.0f,0.0f,0.0f is in the center of windows
-
-2- Y axe point UP, while X axe point RIGHT (as usual) 
-    ^ y
-    |
-    |______> x

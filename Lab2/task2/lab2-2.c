@@ -54,7 +54,7 @@ void init(void)
 	m = LoadModel("../model/bunnyplus.obj");
 	dumpInfo();
 	
-	LoadTGATextureSimple("../texture/bilskissred.tga", &myTex);
+	LoadTGATextureSimple("../texture/rutor.tga", &myTex);
 	
 
 	// GL inits
