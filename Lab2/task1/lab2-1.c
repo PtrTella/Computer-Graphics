@@ -49,7 +49,7 @@ void init(void)
 	unsigned int bunnyTexCoordBufferObjID;
 	
 	//Load teh banny
-	m = LoadModel("bunnyplus.obj");
+	m = LoadModel("../model/bunnyplus.obj");
 	dumpInfo();
 
 	// GL inits
