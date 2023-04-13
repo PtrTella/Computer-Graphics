@@ -6,11 +6,7 @@
 
 // Should work as is on Linux and Mac. MS Windows needs GLEW or glee.
 // See separate Visual Studio version of my demos.
-#ifdef __APPLE__
-	#include <OpenGL/gl3.h>
-	// Linking hint for Lightweight IDE
-	// uses framework Cocoa
-#endif
+
 #include "MicroGlut.h"
 #include "GL_utilities.h"
 #include <math.h>
