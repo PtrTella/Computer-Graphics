@@ -1,0 +1,18 @@
+
+1-What is the purpose of the "in", "out" and "uniform" modifiers?
+    uniform - the value is constant over an entire polygon; it is read/write for OpenGL, and read-only for fragment and vertex shaders.
+    in/out - input and output. In vertex shaders, these are "attributes", can be unique for every vertex (by passing arrays). 
+    The resulting color from a fragment shader is an out variable. 
+    in/out between shaders - out from vertex, in to fragment, "varying" variables: the value will be interpolated over the surface of a polygon; 
+    write in vertex shader, read in fragment shader.
+
+2-What is the output of the fragment shader?
+    The specific matrix you provided appears to represent a translation 
+    of 0.5 units in the x-direction. 
+    This means that when you apply this matrix to a vertex,
+    the x-coordinate of the vertex will be shifted by 0.5 units. 
+    The other elements of the matrix represent identity transformations, 
+    meaning they have no effect on the vertices
+
+3-What does the function glUniformMatrix4fv do?
+    Create a uniform variable contenent the matrix
