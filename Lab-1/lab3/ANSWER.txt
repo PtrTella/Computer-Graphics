@@ -1,0 +1,4 @@
+1-What is the frame rate of the animation?
+    The frame rate is 50fps (frame per second)
+    In fact we refresh the view every 20ms = 0,02s:
+    1s : 0,02s = 50 ==> we execute the function 50 times in second
