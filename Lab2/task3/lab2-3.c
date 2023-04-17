@@ -119,10 +119,9 @@ void init(void)
 	printError("first");
 	glBufferData(GL_ARRAY_BUFFER, m->numVertices*3*sizeof(GLfloat), m->normalArray, GL_STATIC_DRAW);
 	printError("second");
-	GLuint position = glGetAttribLocation(program, "in_Normal");
-	glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(glGetAttribLocation(program, "in_Normal"), 3, GL_FLOAT, GL_FALSE, 0, 0);
 	printError("third");
-	glEnableVertexAttribArray(position);
+	glEnableVertexAttribArray(glGetAttribLocation(program, "in_Normal"));
 	printError("fourth");
 
 	printError("init normal");

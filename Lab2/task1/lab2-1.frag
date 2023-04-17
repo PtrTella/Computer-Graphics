@@ -11,6 +11,6 @@ void main(void)
 	float b = sin(texCoord.s*10);
 	out_Color = vec4(a, b, 1.0, 0.0);
 	*/
-	out_Color = vec4(max(0, cos(texCoord.s*5)), max(0, sin(texCoord.t*10)), 0.5, 0.8f);
+	out_Color = vec4(max(0, cos(texCoord.s*5)), max(0, sin(texCoord.t*10)), 0.5, 0.8f) * vec4(frag_color, 0.5f);
 	
 }
