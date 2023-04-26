@@ -13,6 +13,8 @@
 #include "../common/VectorUtils3.h"
 
 
+
+
 #define near 1.0
 
 #define far 100000.0
@@ -70,6 +72,37 @@ Point3D lightSourcesDirectionsPositions[] = { {10.0f, 5.0f, 0.0f}, // Red light,
                                        {-1.0f, 0.0f, 0.0f}, // Blue light along X
 
                                        {0.0f, 0.0f, -1.0f} }; // White light along Z
+
+
+#define kGroundSize 100.0f
+vec3 vertices[] =
+{
+ { -kGroundSize,0.0f,-kGroundSize},
+ {-kGroundSize,0.0f,kGroundSize},
+ {kGroundSize,-0.0f,-kGroundSize},
+ {kGroundSize,-0.0f,kGroundSize}
+};
+
+vec3 vertex_normals[] =
+{
+  {0.0f,1.0f,0.0f},
+  {0.0f,1.0f,0.0f},
+  {0.0f,1.0f,0.0f},
+  {0.0f,1.0f,0.0f}
+};
+
+vec2 tex_coords[] =
+{
+  {0.0f,0.0f},
+  {0.0f,20.0f},
+  {20.0f,0.0f}, 
+  {20.0f,20.0f}
+};
+GLuint indices[] =
+{
+  0, 1, 2, 1, 3, 2
+};
+
 
 mat4 transform, rot, trans, total, complete, wmWallTransform, wmRoofTransform, wmBalconyTransform;
 mat4 wmBladeTransform, transBlade, rotBlade, groundBoxTransform, scale, cameraMatrix, world, bunnyTransform;
@@ -201,6 +234,7 @@ void drawGround(){
 	glUniform1i(glGetUniformLocation(noshadeprogram,"texUnit"),0);
 	glUniformMatrix4fv(glGetUniformLocation(noshadeprogram, "uniTotal"), 1, GL_TRUE, complete.m);
 	DrawModel(groundBox, noshadeprogram, "in_Position", NULL, "inTexCoord");
+	printError("Drow Ground");
 }
 
 void CheckInput(){
@@ -238,6 +272,8 @@ void loadModels(){
 	groundBox = LoadModelPlus("../object/groundbox.obj");
 	bunny = LoadModelPlus("../object/bunnyplus.obj");
 	skyBox = LoadModelPlus("../object/skybox.obj");
+
+	printError("load Model");
 }
 
 void initTransforms(){
@@ -252,6 +288,8 @@ void uploadProjectionMatrices(){
 	glUniformMatrix4fv(glGetUniformLocation(program, "uniProjection"), 1, GL_TRUE, projectionMatrix);
 	glUseProgram(bunnyprogram);
 	glUniformMatrix4fv(glGetUniformLocation(bunnyprogram, "uniProjection"), 1, GL_TRUE, projectionMatrix);
+
+	printError("Upload matrices");
 }
 
 
@@ -260,6 +298,8 @@ void uploadTextures(){
 	glBindTexture(GL_TEXTURE_2D, groundTex);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, skyboxTex);
+	
+	printError("upload Texture");
 }
 
 void uploadLights(){
@@ -288,13 +328,15 @@ void uploadLights(){
 	glUniform1fv(glGetUniformLocation(bunnyprogram, "specularExponent"), 4, specularExponent);
 	glUniform1iv(glGetUniformLocation(bunnyprogram, "isDirectional"), 4, isDirectional);
 
-
+	printError("upload light");
 }
 
 void initShaders(){
 	program = loadShaders("lab3.vert", "lab3.frag");
 	noshadeprogram = loadShaders("noshade.vert", "noshade.frag");
 	bunnyprogram = loadShaders("bunny.vert", "bunny.frag");
+
+	printError("Init shader");
 }
 
 
@@ -303,8 +345,9 @@ void init(void)
 {
 	// Load windmill
 
+	// Load tga texture
 	LoadTGATextureSimple("../texture/SkyBox512.tga", &skyboxTex);
-	LoadTGATextureSimple("../texture/Grass_tile_B_diffuse.tga", &groundTex);
+	LoadTGATextureSimple("../texture/Grass_tile_B_specular.tga", &groundTex);
 	
 	//Load Models
 	loadModels();
@@ -333,8 +376,6 @@ void init(void)
 	printError("init arrays");
 
 	uploadLights();
-
-
 	
 
 }
