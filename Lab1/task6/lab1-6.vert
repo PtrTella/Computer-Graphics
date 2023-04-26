@@ -12,6 +12,6 @@ out	vec3 frag_color;
 
 void main(void)
 {
-	frag_color = vec3(0.2, 0.3, 0.7) + in_Normal;
+	frag_color = in_Color - in_Normal;
 	gl_Position = vec4(in_Position, 1.0) * (Rotx * Rotz);
 }
